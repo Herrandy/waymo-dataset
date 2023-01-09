@@ -1,0 +1,13 @@
+name: waymo-dataset
+dependencies:
+  - python=3.9
+  - numpy
+  - ipykernel
+  - matplotlib
+  - jupyterlab
+  - pip
+  - black[d]
+  - pip:
+      - waymo-open-dataset-tf-2-6-0
+      - opencv-python
+      - open3d

@@ -43,8 +43,9 @@ def waymo_label_to_dict(label):
         raise TypeError(f"Unknown label type {label.type}")
 
     label_dict = {
-        "position": [label.box.center_x, label.box.center_y, label.box.center_z],
-        "extent": [label.box.width, label.box.length, label.box.height],
+        "center": [label.box.center_x, label.box.center_y, label.box.center_z],
+        # Dimensions of the box. length: dim x. width: dim y. height: dim z.
+        "extent": [label.box.length, label.box.width, label.box.height],
         "rotation": [0.0, 0.0, label.box.heading],
         "num_lidar_points_in_box": label.num_lidar_points_in_box,
         "label_type": label_type,

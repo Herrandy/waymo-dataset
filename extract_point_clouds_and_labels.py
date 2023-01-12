@@ -9,10 +9,7 @@ from waymo_open_dataset.dataset_pb2 import Frame
 from waymo_open_dataset import label_pb2
 from waymo_open_dataset.utils import frame_utils
 
-
-def create_folder(folder_dir):
-    if not os.path.exists(folder_dir):
-        os.makedirs(folder_dir)
+from common_utils import create_folder
 
 
 def save_pc(filename, pc):

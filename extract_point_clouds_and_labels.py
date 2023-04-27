@@ -9,7 +9,7 @@ from waymo_open_dataset.dataset_pb2 import Frame
 from waymo_open_dataset import label_pb2
 from waymo_open_dataset.utils import frame_utils
 
-from common_utils import create_folder
+from common_utils import create_folder, get_filename_without_path_and_extension
 
 
 def save_pc(filename, pc):
@@ -27,7 +27,6 @@ def save_labels(filename, labels):
 
 
 def waymo_label_to_dict(label):
-
     if label.type == label_pb2.Label.Type.TYPE_VEHICLE:
         label_type = "vehicle"
     elif label.type == label_pb2.Label.Type.TYPE_PEDESTRIAN:
@@ -84,19 +83,20 @@ def process_records(input_dir, output_dir):
     for record in records:
         print(f"Processing record {record}")
         data_set = tf.data.TFRecordDataset(record, compression_type="")
+        record_name = get_filename_without_path_and_extension(record)
         for idx, data in enumerate(data_set):
             print(f"Frame index: {idx}")
             pc, labels = process_data(data)
-
-            pc_filename = os.path.join(output_pc_dir, str(idx).zfill(5) + ".bin")
-            labels_filename = os.path.join(output_label_dir, str(idx).zfill(5) + ".json")
+            filename = record_name + "_" + str(idx).zfill(5)
+            pc_filename = os.path.join(output_pc_dir, filename + ".bin")
+            labels_filename = os.path.join(output_label_dir, filename + ".json")
             save_pc(pc_filename, pc)
             save_labels(labels_filename, labels)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create video from the dataset")
-    parser.add_argument("-i", "--input-dir", default="/media/antti/Sensible4_2TB/datasets/waymo_dataset")
+    parser.add_argument("-i", "--input-dir", default="input")
     parser.add_argument("-o", "--output-dir", default="output")
     args = parser.parse_args()
     process_records(args.input_dir, args.output_dir)
